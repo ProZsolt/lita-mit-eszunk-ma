@@ -6,11 +6,12 @@ require 'time'
 module Lita
   module Handlers
     class MitEszunkMa < Handler
+      config :access_token, type: String, required: true
+
       route(/^mit eszunk ma\?/, :menu, command: true)
       route(/^menu/, :menu, command: true)
 
       def initialize(robot)
-        @access_token = 'xxxxxxxxxxxxxxxxxxxxxx'
         @restaurants = {
           'Klassz' => {
             :page_id => '119587274776184',
@@ -36,7 +37,7 @@ module Lita
       end
 
       def get_feed(page_id)
-        uri = URI.parse(URI.encode "https://graph.facebook.com/v2.4/#{page_id}/feed?access_token=#{@access_token}" )
+        uri = URI.parse(URI.encode "https://graph.facebook.com/v2.4/#{page_id}/feed?access_token=#{Lita.config.handlers.mit_eszunk_ma.access_token}" )
         response = Net::HTTP.get_response uri
         JSON.parse(response.body)['data']
       end

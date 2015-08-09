@@ -12,7 +12,7 @@ gem "lita-mit-eszunk-ma"
 
 ## Configuration
 
-TODO: Describe any configuration attributes the plugin exposes.
+config.handlers.mit_eszunk_ma.access_token = ''
 
 ## Usage
 
