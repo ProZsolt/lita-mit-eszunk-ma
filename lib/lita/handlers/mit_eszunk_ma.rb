@@ -15,23 +15,28 @@ module Lita
         @restaurants = {
           'Klassz' => {
             :page_id => '119587274776184',
-            :regex => /Klassz ebéd,.+ !\n(.+)\nMenü ára/m
+            :regex => /Klassz ebéd,.+ !\n(.+)\nMenü ára/m,
+            :offset => 1
           },
           'Vian' => {
             :page_id => 'cafevian',
-            :regex => /\#CafeVian .+ Napi \#Menu 1090.-\/fő:\n\n(.+)\n\nNapi Desszert:/m
+            :regex => /\#CafeVian .+ Napi \#Menu 1090.-\/fő:\n\n(.+)\n\nNapi Desszert:/m,
+            :offset => 0
           },
           'Disznó' => {
             :page_id => 'PestiDiszno',
-            :regex => /BISZTRÓEBÉD \| .+ \| \d+ Ft, itallal \d+ Ft\n\n(.+)/m
+            :regex => /BISZTRÓEBÉD \| .+ \| \d+ Ft, itallal \d+ Ft\n\n(.+)/m,
+            :offset => 0
           },
           'Chagall' => {
             :page_id => 'chagallcafe',
-            :regex => /Mai Chagall menü:\n(.+)\n>>/m
+            :regex => /Mai Chagall menü:\n(.+)\n>>/m,
+            :offset => 0
           },
           'Menza' => {
             :page_id => 'menzarestaurant',
-            :regex => /Mai menü:\n(.+) \d+\.-/m
+            :regex => /Mai menü:\n(.+) \d+\.-/m,
+            :offset => 0
           }
         }
       end
@@ -46,7 +51,7 @@ module Lita
         feed = get_feed restaurant[:page_id]
         menu_post = feed.find do |post|
           restaurant[:regex] =~ post['message'] and
-          Date.parse(post['created_time']) == Date.today
+          Date.parse(post['created_time']) == Date.today - restaurant[:offset]
         end
         return '-' unless menu_post
         menu_post['message'].scan(restaurant[:regex])[0][0]
